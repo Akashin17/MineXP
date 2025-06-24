@@ -18,46 +18,26 @@ import androidx.navigation.NavController
 import com.example.minexp.ui.screen.navigation.BottomNavigationBar
 
 @Composable
-fun HomeScreen (
-    navController: NavController,
-    currentRoute: String?,) {
+fun HomeScreenContent () {
     val todoItems = remember { mutableStateListOf("Valorant", "Belajar Compose", "Olahraga", "Meditasi") }
     val checkedStates = remember { mutableStateListOf(false, false, false, false) }
-
-    Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { /* Tambah aksi */ },
-                shape = CircleShape,
-                containerColor = Color.Black,
-                contentColor = Color.White,
-                modifier = Modifier
-                    .offset(y = 40.dp)
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Tambah")
-            }
-        },
-        floatingActionButtonPosition = FabPosition.Center,
-        bottomBar = { BottomNavigationBar(navController = navController, currentRoute = currentRoute) }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFFF8F8F8))
-                .padding(padding)
-                .padding(16.dp)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF8F8F8))
+            .padding(16.dp)
+            .padding(16.dp)
+    ) {
+        HeaderSection()
+        Spacer(modifier = Modifier.height(16.dp))
+        XPLevelCard()
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            HeaderSection()
-            Spacer(modifier = Modifier.height(16.dp))
-            XPLevelCard()
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                TodoList(todoItems, checkedStates)
-                RecentActivityCard()
-            }
+            TodoList(todoItems, checkedStates)
+            RecentActivityCard()
         }
     }
 }
