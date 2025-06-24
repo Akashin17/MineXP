@@ -1,11 +1,10 @@
 package com.example.minexp
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.activity.ComponentActivity
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -14,11 +13,12 @@ import com.example.minexp.ui.screen.account.AccountScreen
 import com.example.minexp.ui.screen.homepage.HomeScreen
 import com.example.minexp.ui.screen.ideaspace.IdeaSpaceScreen
 import com.example.minexp.ui.screen.quest.QuestScreen
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             Navigation()
         }
