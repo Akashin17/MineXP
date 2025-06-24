@@ -14,6 +14,7 @@
         <activity
             android:name="com.example.minexp.MainActivity"
             android:exported="true"
+            android:label="@string/MindXP"
             android:theme="@style/Theme.MindXP.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

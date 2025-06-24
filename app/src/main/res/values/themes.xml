@@ -4,5 +4,6 @@
     <style name="Theme.MindXP.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/purple</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/logo_app</item>
+        <item name="postSplashScreenTheme">@style/Theme.MindXP</item>
     </style>
 </resources>
