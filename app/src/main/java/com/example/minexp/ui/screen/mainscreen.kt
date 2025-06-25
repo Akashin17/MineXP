@@ -15,13 +15,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.minexp.ui.screen.account.AccountScreenContent
 import com.example.minexp.ui.screen.homepage.HomeScreenContent
 import com.example.minexp.ui.screen.ideaspace.IdeaSpaceScreenContent
@@ -36,14 +37,20 @@ fun MainScreen() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    val showBottomBarAndFab = when (currentRoute) {
-        "noteedit" -> false
+    // Perbarui kondisi untuk showBottomBarAndFab agar lebih spesifik
+    // jika rute "noteedit" memiliki argumen
+    val showBottomBarAndFab = when {
+        currentRoute?.startsWith("noteedit/") == true -> false // Untuk noteedit/{noteId}
+        currentRoute == "noteedit" -> false // Jika Anda masih memiliki rute "noteedit" tanpa argumen (sebaiknya dihindari jika selalu butuh ID)
         else -> true
     }
 
     Scaffold(
         topBar = {
-            if (currentRoute == "noteedit") {
+            // Logika TopAppBar Anda untuk "noteedit" sepertinya sudah benar
+            // jika Anda ingin TopAppBar yang berbeda untuk layar edit.
+            // Pastikan currentRoute cocok dengan rute yang Anda gunakan untuk NoteScreenContent.
+            if (currentRoute?.startsWith("noteedit/") == true) {
                 CenterAlignedTopAppBar(
                     title = {
                         Button(
@@ -69,7 +76,7 @@ fun MainScreen() {
                         }
                     },
                     colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = Color(0xFF8E63D4)
+                        containerColor = Color(0xFF8E63D4) // Warna TopAppBar untuk noteedit
                     )
                 )
             }
@@ -82,7 +89,12 @@ fun MainScreen() {
         floatingActionButton = {
             if (showBottomBarAndFab) {
                 FloatingActionButton(
-                    onClick = { navController.navigate("noteedit") },
+                    onClick = {
+                        // Navigasi ke layar edit untuk CATATAN BARU.
+                        // Kirim ID khusus (misalnya -1L) yang akan diinterpretasikan sebagai null (catatan baru)
+                        // oleh NoteScreenContent.
+                        navController.navigate("noteedit/-1L")
+                    },
                     shape = CircleShape,
                     containerColor = Color.Black,
                     contentColor = Color.White,
@@ -93,18 +105,43 @@ fun MainScreen() {
             }
         },
         floatingActionButtonPosition = FabPosition.Center,
-        containerColor = if (currentRoute == "noteedit") Color.White else Color(0xFFF8F8F8)
+        // Sesuaikan containerColor berdasarkan rute yang benar
+        containerColor = if (currentRoute?.startsWith("noteedit/") == true) Color.White else Color(0xFFF8F8F8)
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = "home",
+            startDestination = "home", // Atau rute awal Anda
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable("home") { HomeScreenContent() }
-            composable("quest") { QuestScreenContent() }
-            composable("ideaspace") { IdeaSpaceScreenContent() }
-            composable("account") { AccountScreenContent() }
-            composable("noteedit") { NoteScreenContent() }
+            composable("home") { HomeScreenContent(/* ... parameter jika ada ... */) }
+            composable("quest") { QuestScreenContent(/* ... parameter jika ada ... */) }
+            composable("ideaspace") {
+                IdeaSpaceScreenContent(
+                    onNavigateToEditNote = { noteId ->
+                        navController.navigate("noteedit/$noteId") // Navigasi ke rute edit dengan ID
+                    }
+                )
+            }
+            composable("account") { AccountScreenContent(/* ... parameter jika ada ... */) }
+
+            // Definisikan rute untuk noteedit dengan argumen noteId
+            composable(
+                route = "noteedit/{noteId}",
+                arguments = listOf(navArgument("noteId") { type = NavType.LongType })
+            ) { backStackEntry ->
+                val noteIdArg = backStackEntry.arguments?.getLong("noteId")
+                // Jika noteIdArg adalah -1L (atau nilai default Anda), berarti ini catatan baru,
+                // sehingga teruskan null ke NoteScreenContent.
+                val actualNoteId = if (noteIdArg == -1L) null else noteIdArg
+
+                NoteScreenContent(
+                    noteId = actualNoteId,
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    }
+                    // viewModel akan disediakan secara default oleh viewModel() di dalam NoteScreenContent
+                )
+            }
         }
     }
 }
