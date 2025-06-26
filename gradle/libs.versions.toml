@@ -1,20 +1,21 @@
 [versions]
-agp = "8.6.0"
+agp = "8.6.1"
 coreSplashscreen = "1.0.1"
-kotlin = "1.9.0"
-coreKtx = "1.15.0"
+kotlin = "2.0.0"
+coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-lifecycleRuntimeKtx = "2.8.7"
+lifecycleRuntimeKtx = "2.9.1"
 activityCompose = "1.10.1"
-composeBom = "2024.04.01"
-navigationCompose = "2.7.2"
+composeBom = "2025.06.01"
+navigationCompose = "2.9.0"
 protoliteWellKnownTypes = "18.0.1"
 appcompat = "1.7.1"
-kotlinSymbolProcessing = "1.9.20-1.0.13"
+kotlinSymbolProcessing = "2.0.0-1.0.21"
 lifecycleLivedataKtx = "2.9.1"
 runtimeLivedata = "1.8.3"
+kotlinxSerializationJson = "1.7.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -37,8 +38,11 @@ protolite-well-known-types = { group = "com.google.firebase", name = "protolite-
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-symbol-processing = { id = "com.google.devtools.ksp", version.ref = "kotlinSymbolProcessing" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
